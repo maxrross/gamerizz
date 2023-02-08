@@ -50,10 +50,9 @@ func main() {
 	jwtMiddleWare := jwtmiddleware.New(jwtValidator.ValidateToken)
 	r.Use(adapter.Wrap(jwtMiddleWare.CheckJWT))
 
-	r.GET("/ping", adapter.Wrap(jwtMiddleWare.CheckJWT), func(c *gin.Context) {
+	r.GET("/authenticated", adapter.Wrap(jwtMiddleWare.CheckJWT), func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-
-			"message": "pong",
+			"message": "user authenticated",
 		})
 	})
 	r.Run()
