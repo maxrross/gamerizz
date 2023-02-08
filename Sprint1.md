@@ -21,7 +21,7 @@
   virtually pleasing, and creating our Sprint1.md for submission.
 
 ## Which ones were successfully completed:
-  We succesfully completed 
+  We succesfully completed every one of our issues.
 
 ## Which ones didn't and why:
-  We did not complete 
+  We did not have any problems and completed everything.
