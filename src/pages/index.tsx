@@ -4,13 +4,12 @@ import Link from "next/link";
 import Profile from "@/components/profile";
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, CursorArrowRaysIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
 const navigation = [
   { name: "Product", href: "#" },
   { name: "Features", href: "#" },
-  { name: "Marketplace", href: "#" },
   { name: "Company", href: "#" },
 ];
 
@@ -22,7 +21,7 @@ export default function Home() {
 
   return (
     <div className="isolate bg-white">
-      <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
+      <div className="TopGradient absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
         <svg
           className="relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]"
           viewBox="0 0 1155 678"
@@ -42,31 +41,17 @@ export default function Home() {
               y2="474.645"
               gradientUnits="userSpaceOnUse"
             >
-              <stop stopColor="#9089FC" />
-              <stop offset={1} stopColor="#FF80B5" />
+              <stop stopColor="#4AD4AF" />
+              <stop offset={1} stopColor="#20B7AB" />
             </linearGradient>
           </defs>
         </svg>
       </div>
-      <div className="px-6 pt-6 lg:px-8">
-        <nav className="flex items-center justify-between" aria-label="Global">
+      <div className="Navbar px-6 pt-6 lg:px-8">
+        <nav className="flex items-center justify-between">
           <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Game Rizz</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="h-6 w-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59"
-                />
-              </svg>
+            <a href="/" className="-m-1.5 p-1.5">
+              <CursorArrowRaysIcon className="h-8 w-8" />
             </a>
           </div>
           <div className="flex lg:hidden">
@@ -75,7 +60,6 @@ export default function Home() {
               className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
               onClick={() => setMobileMenuOpen(true)}
             >
-              <span className="sr-only">Open main menu</span>
               <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
@@ -104,7 +88,7 @@ export default function Home() {
             ) : (
               <div className="flex flex-row text-sm font-semibold leading-6 text-gray-900">
                 <a href="/api/auth/login">
-                  Sign In
+                  Log In
                   <span className="ml-1" aria-hidden="true">
                     &rarr;
                   </span>
@@ -115,24 +99,17 @@ export default function Home() {
         </nav>
         <Dialog as="div" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
           <Dialog.Panel
-            focus="true"
             className="fixed inset-0 z-10 overflow-y-auto bg-white px-6 py-6 lg:hidden"
           >
             <div className="flex items-center justify-between">
-              <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
-                <img
-                  className="h-8"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt=""
-                />
+              <a href="/" className="-m-1.5 p-1.5">
+                <CursorArrowRaysIcon className="h-8 w-8"/>
               </a>
               <button
                 type="button"
                 className="-m-2.5 rounded-md p-2.5 text-gray-700"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <span className="sr-only">Close menu</span>
                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
@@ -151,7 +128,7 @@ export default function Home() {
                 </div>
                 <div className="py-6">
                   <a
-                    href="#"
+                    href="/api/auth/login"
                     className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-6 text-gray-900 hover:bg-gray-400/10"
                   >
                     Log in
@@ -163,7 +140,7 @@ export default function Home() {
         </Dialog>
       </div>
       <main>
-        <div className="relative px-6 lg:px-8">
+        <div className="CenterPage relative px-6 lg:px-8">
           <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
             <div className="text-center">
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
@@ -183,7 +160,7 @@ export default function Home() {
                     />
                     <a
                       href="/api/auth/logout"
-                      className="rounded-md bg-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      className="rounded-md bg-[#0D9AA0] px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-[#1E7E8E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#20B7AB]"
                     >
                       Sign Out
                     </a>
@@ -192,9 +169,9 @@ export default function Home() {
                   <div className="mt-10 flex items-center justify-center gap-x-6">
                     <a
                       href="/api/auth/login"
-                      className="rounded-md bg-indigo-600 px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      className="rounded-md bg-[#0D9AA0] px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-[#1E7E8E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#20B7AB]"
                     >
-                      Sign In
+                      Log In
                     </a>
 
                     <a
@@ -208,7 +185,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="absolute inset-x-0 top-[calc(100%-18rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-44rem)]">
+          <div className="BottomGradient absolute inset-x-0 top-[calc(100%-18rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-44rem)]">
             <svg
               className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
               viewBox="0 0 1155 678"
@@ -228,8 +205,8 @@ export default function Home() {
                   y2="474.645"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop stopColor="#9089FC" />
-                  <stop offset={1} stopColor="#FF80B5" />
+                  <stop stopColor="#4AD4AF" />
+                  <stop offset={1} stopColor="#20B7AB" />
                 </linearGradient>
               </defs>
             </svg>
