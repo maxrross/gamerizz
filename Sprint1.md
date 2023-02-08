@@ -17,11 +17,17 @@
   As a new member, I want help setting up my account so that I can get a jumpstart on the site without starting at the complete start with nothing.
 
 ## What issues your team planned to address:
-  We planned to address setting up our MongoDB databas, setting up our backend endpoint for login/sign up, creating login and sign up user interface, making the login
+  We planned to address setting up our MongoDB databas, setting up our backend endpoint for seeing if the user is authenticated, creating login and sign up user interface, making the login
   virtually pleasing, and creating our Sprint1.md for submission.
 
 ## Which ones were successfully completed:
-  The front end team successfully created a login and homepage user interface. We added a responsive navbar with mobile view and login/signup authentication with Auth0. 
+  The frontend team successfully created a login and homepage user interface. We added a responsive navbar with mobile view and login/signup authentication with Auth0. 
+
+The backend team was able to setup the MongoDB database and connect it to our code in Go. We also were able create an enpoint that connected to Auth0 to see if a user's JST token is valid.
 
 ## Which ones didn't and why:
   We did not have any problems and completed everything.
+
+[Frontend Video](https://youtu.be/3njAvDlYxlU)
+
+[Backend Video](https://www.youtube.com/watch?v=OCOLkHqtEpw)
