@@ -21,7 +21,7 @@
   virtually pleasing, and creating our Sprint1.md for submission.
 
 ## Which ones were successfully completed:
-  We succesfully completed every one of our issues.
+  The front end team successfully created a login and homepage user interface. We added a responsive navbar with mobile view and login/signup authentication with Auth0. 
 
 ## Which ones didn't and why:
   We did not have any problems and completed everything.
