@@ -1,5 +1,5 @@
 // pages/_app.js
-import '@/styles/globals.css'
+import '@/src/styles/globals.css'
 import React from 'react';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import type { AppProps } from 'next/app'

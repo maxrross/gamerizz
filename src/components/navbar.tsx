@@ -2,11 +2,12 @@ import { Dialog } from "@headlessui/react";
 import { Bars3Icon, CursorArrowRaysIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useState } from "react";
+import Link from "next/link";
 
 const navigation = [
-    { name: "Product", href: "#" },
-    { name: "Features", href: "#" },
-    { name: "Company", href: "#" },
+    { name: "Games", href: "/games" },
+    { name: "Search", href: "/search" },
+    { name: "Reviews", href: "#" },
   ];
 
 export default function Navbar(){
@@ -86,13 +87,13 @@ export default function Navbar(){
               <div className="-my-6 divide-y divide-gray-500/10">
                 <div className="space-y-2 py-6">
                   {navigation.map((item) => (
-                    <a
+                    <Link
                       key={item.name}
                       href={item.href}
                       className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10"
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
                 <div className="py-6">
