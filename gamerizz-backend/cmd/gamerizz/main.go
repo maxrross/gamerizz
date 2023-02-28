@@ -96,7 +96,7 @@ func main() {
 	jwtMiddleWare := jwtmiddleware.New(jwtValidator.ValidateToken)
 	r.Use(adapter.Wrap(jwtMiddleWare.CheckJWT))
 
-	r.GET("/authenticated", adapter.Wrap(jwtMiddleWare.CheckJWT), func(c *gin.Context) {
+	r.GET("/authenticated", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "user authenticated",
 		})
