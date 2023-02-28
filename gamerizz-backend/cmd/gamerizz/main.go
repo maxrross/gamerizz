@@ -14,6 +14,7 @@ import (
 	jwtmiddleware "github.com/auth0/go-jwt-middleware/v2"
 	"github.com/auth0/go-jwt-middleware/v2/jwks"
 	"github.com/auth0/go-jwt-middleware/v2/validator"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	adapter "github.com/gwatts/gin-adapter"
 	"github.com/joho/godotenv"
@@ -94,6 +95,9 @@ func main() {
 	jwtValidator, _ := validator.New(auth0Provider.KeyFunc, validator.RS256, AUTH0_URL.String(), []string{AUTH0_AUDIENCE})
 
 	jwtMiddleWare := jwtmiddleware.New(jwtValidator.ValidateToken)
+
+	r.Use(cors.Default())
+
 
 	r.GET("/authenticated", adapter.Wrap(jwtMiddleWare.CheckJWT), func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
