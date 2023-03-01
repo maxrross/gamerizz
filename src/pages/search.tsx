@@ -15,7 +15,7 @@ export const getGames = async (query: string) => {
     const { data: games } = await axios.get(
       `http://localhost:8080/games?title=${query}`
     );
-    return games;
+    return games.message;
   } catch (error) {
     console.error(error);
     throw new Error("Unable to fetch games");
@@ -30,36 +30,22 @@ export default function Games() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<Game[]>(DEFAULT_DATA);
   const [query, setQuery] = useState("");
+  // const [debounceTime, setDebounceTime] = useState(Date.now());
 
-  const fetchData = useCallback(async () => {
-    try {
+  useEffect(() => {
+    (async () => {
+      if (query === "") return;
+      // if (Date.now() - debounceTime < DEBOUNCE_DELAY) return;
+
       setIsLoading(true);
       const games = await getGames(query);
       setData(games);
+      setIsLoading(false);
       console.log(data);
-      console.log(games);
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      throw new Error("Unable to fetch games");
-    }
-  }, [query]);
 
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    if (query === "") {
-      setData(DEFAULT_DATA);
-      setIsLoading(false);
-      return;
-    }
-    timeoutId = setTimeout(() => {
-      fetchData();
-    }, DEBOUNCE_DELAY);
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [fetchData, query]);
+      // setDebounceTime(Date.now());
+    })();
+  }, [data, query]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
