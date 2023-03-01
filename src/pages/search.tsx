@@ -62,6 +62,7 @@ export default function Games() {
               <a
                 className="flex flex-col rounded-xl border bg-white shadow-sm transition hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:shadow-slate-700/[.7]"
                 href="#"
+                key={game.id}
               >
                 <img
                   className="h-[200px] w-full overflow-clip rounded-t-xl"
