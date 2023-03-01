@@ -14,6 +14,7 @@ TestSearchGamesID() -- verifies the first game ID returned from our search is wh
 TestSearchGamesName() -- verifies the first game Name returned from our search is what we would expect from our database
 
 TestSearchGamesCount() -- verifies that our search is limited to the first 20 objects (the size of the array returned should be 20)
+
 (note our tests won't run without our API access key, which has been omitted from the test file for security reasons)
 
 //Add documentation for your backend API 
