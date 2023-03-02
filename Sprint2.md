@@ -20,7 +20,6 @@ on the frontend.
 
 ## List Cypress test for frontend
 
-Max:
 Implemented unit testing for the search bar using Cypress. This test checks if the component can load correctly and display results.
 
 ## List unit tests for backend
