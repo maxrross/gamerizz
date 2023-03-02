@@ -9,6 +9,10 @@ Max:
 Created a search bar for the search page and display results after fetching the backend API for games. 
 Dynamically loads games as the user types in their query.
 
+Brogan:
+Created unit tests for the frontend using cypress and assisted with code structure in creating the search page
+that displays results.
+
 Blake: 
 Utilized the Rawg.io api to have access to over 500,000 game titles. Created a new backend endpoint that takes in a request from the frontend
 and then processes and sends the request to Rawg. It then returns only the needed information. I also helped with some of the search bar functionality
