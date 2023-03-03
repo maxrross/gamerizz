@@ -12,7 +12,7 @@ export default function Home() {
   if (error) return <div>{error.message}</div>;
 
   return (
-    <div className="isolate bg-white">
+    <div className="isolate bg-white dark:bg-gray-800 dark:shadow-slate-700/[.7] dark:text-white">
       <div className="TopGradient absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
         <svg
           className="relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]"
@@ -44,10 +44,10 @@ export default function Home() {
         <div className="relative px-6 lg:px-8">
           <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
             <div className="text-center">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl">
                 Enhancing the future of video games.
               </h1>
-              <p className="mt-6 text-lg leading-8 text-gray-600">
+              <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-white">
                 The platform where you can find, comment, and post about the
                 best video games in the industry. Made by gamers, for gamers.
               </p>
@@ -77,7 +77,7 @@ export default function Home() {
 
                     <a
                       href="/api/auth/login"
-                      className="text-base font-semibold leading-7 text-gray-900"
+                      className="text-base font-semibold leading-7 text-gray-900 dark:text-white"
                     >
                       Sign Up <span aria-hidden="true">→</span>
                     </a>

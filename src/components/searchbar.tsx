@@ -65,9 +65,9 @@ export default function SearchBar() {
 
   return (
     <div>
-      <div className="mx-auto mt-10 w-4/5 max-w-6xl">
+      <div className="mx-auto mt-10 w-4/5 max-w-6xl pb-20">
         <input
-          className="block w-full rounded-md border border-gray-200 py-3 px-4 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-400"
+          className="block w-full rounded-md border border-gray-200 py-3 px-4 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-slate-800 dark:text-gray-400"
           type="text"
           placeholder="Search games"
           onChange={handleInputChange}
