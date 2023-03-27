@@ -18,6 +18,7 @@ import (
 	"github.com/gin-gonic/gin"
 	adapter "github.com/gwatts/gin-adapter"
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -82,7 +83,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	client.Database("users").Collection("user")
+	//client.Database("users").Collection("user")
+	collection := client.Database("games").Collection("game")
 
 	r := gin.Default()
 
@@ -113,5 +115,54 @@ func main() {
 		})
 	})
 
+	r.GET("/upvoteCount", func(c *gin.Context) {
+		filter := bson.M{"name": c.Query("title")}
+		var game bson.M
+		err = collection.FindOne(context.Background(), filter).Decode(&game)
+
+		if err != nil && err != mongo.ErrNoDocuments {
+			log.Fatal(err)
+		}
+		var upvotes int32 = 0
+
+		if game != nil {
+			upvotes = game["upvotes"].(int32)
+		}
+
+			c.JSON(http.StatusOK, gin.H{
+				"upvoteCount": upvotes,
+
+			})
+	})
+
+	r.GET("/upvote", func(c *gin.Context) {
+		filter := bson.M{"name": c.Query("title")}
+		var game bson.M
+		err = collection.FindOne(context.Background(), filter).Decode(&game)
+	
+		if err != nil && err != mongo.ErrNoDocuments {
+			log.Fatal(err)
+		}
+
+		var upvotes int32 = 0
+
+		if game == nil {
+			game = bson.M{"name": c.Query("title"), "upvotes": upvotes}
+			_, err = collection.InsertOne(context.Background(), game)
+		}
+
+		
+		if game != nil {
+			upvotes = game["upvotes"].(int32)
+			upvotes += 1
+			update := bson.M{"$set": bson.M{"upvotes": upvotes}}
+			_, err = collection.UpdateOne(context.Background(), filter, update)
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "upvoted",
+			"upvoteCount": upvotes,
+		})
+	})
 	r.Run()
 }
