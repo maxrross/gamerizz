@@ -79,7 +79,7 @@ export default function SearchBar() {
             {data.map((game) => (
               <a
                 className="group flex flex-col overflow-hidden rounded-xl border bg-white shadow-sm transition hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:shadow-slate-700/[.7]"
-                href="#"
+                href={`/game/${game.name}`}
               >
                 <div className="relative overflow-hidden rounded-t-xl pt-[50%] sm:pt-[60%] lg:pt-[80%]">
                   <img
