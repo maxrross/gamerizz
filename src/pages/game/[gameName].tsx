@@ -18,6 +18,7 @@ export const getGame = async (query: any) => {
 const Post = () => {
   const [displayName, setDisplayName] = useState("");
   const [upvoteCount, setUpvoteCount] = useState(0);
+  const [description, setDescription] = useState("");
   const router = useRouter();
   const { gameName } = router.query;
 
@@ -28,6 +29,7 @@ const Post = () => {
       .then((response) => {
         setDisplayName(response.data.gameTitle.name);
         setUpvoteCount(response.data.upvoteCount);
+        setDescription(response.data.description);
       });
   }, [router.isReady]);
 
@@ -36,6 +38,8 @@ const Post = () => {
       Display Name: {displayName}
       <br></br>
       Upvote Count: {upvoteCount}
+      <br></br>
+      Description: {description}
     </div>
   );
 };

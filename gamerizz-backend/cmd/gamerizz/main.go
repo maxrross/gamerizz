@@ -120,6 +120,7 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{
 			"gameTitle": title,
 			"upvoteCount": 0,
+			"description": "test",
 		})
 	})
 
