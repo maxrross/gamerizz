@@ -23,11 +23,25 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+type PlatformInfo struct {
+	ID int `json:"id"`
+	Name string `json:"name"`
+	Slug string `json:"slug"`
+}
+
+type Platform struct {
+	Platform PlatformInfo `json:"platform"`
+}
+
 type Game struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
 	Slug  string `json:"slug"`
 	BackgroundImage string `json:"background_image"`
+	Description string `json:"description"`
+	Released string `json:"released"`
+	Rating float64 `json:"rating"`
+	Platforms []Platform `json:"platforms"`
 }
 
 // Response represents a response object returned by the API
