@@ -1,8 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import Index from "./index";
-import '@testing-library/jest-dom';
-import "@testing-library/jest-dom/extend-expect";
-
+// import "@testing-library/jest-dom";
+// import "@testing-library/jest-dom/extend-expect";
 
 test("renders loading message while user is still loading", () => {
   const { getByText } = render(<Index />);
