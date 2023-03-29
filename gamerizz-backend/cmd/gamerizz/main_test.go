@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-var tempKey string = "insert key"
+//insert tempKey
 
 // test to see if the first game ID matches the ID of Mario
 func TestSearchGamesID(t *testing.T) {
@@ -38,5 +38,16 @@ func TestSearchGamesCount(t *testing.T) {
 	//fmt.Println(got)
 	if want != len(got) {
 		t.Errorf("got %q, wanted %q", len(got), want)
+	}
+}
+
+
+func TestGetGameDataID(t *testing.T) {
+	want := "mario-tennis-aces"
+	got := getGameData("mario-tennis-aces", tempKey)
+	//print out got to see what it is
+	// fmt.Println(got)
+	if want != got.Slug {
+		t.Errorf("got %q, wanted %q", got.ID, want)
 	}
 }
