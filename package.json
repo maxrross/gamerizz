@@ -11,6 +11,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.0.1",
     "@auth0/nextjs-auth0": "^2.2.1",
     "@headlessui/react": "^1.7.10",
     "@heroicons/react": "^2.0.14",

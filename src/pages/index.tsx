@@ -4,7 +4,7 @@ import Link from "next/link";
 import Profile from "@/src/components/profile";
 import { useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import Navbar from "@/src/components/navbar";
+import Navbar from "../components/navbar";
 
 export default function Home() {
   const { user, error, isLoading } = useUser();
