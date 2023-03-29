@@ -3,11 +3,53 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "@/src/components/navbar";
 import { ArrowDownCircle, ArrowUpCircle } from "lucide-react";
+var sanitizeHtml = require("sanitize-html");
+
+const updateVoteCount = async (slug: string) => {
+  try {
+    const { data } = await axios.get(
+      `http://localhost:8080/upvote?title=${slug}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+    throw new Error("Unable to update vote count");
+  }
+};
+
+const updateDownVoteCount = async (slug: string) => {
+  try {
+    const { data } = await axios.get(
+      `http://localhost:8080/downvote?title=${slug}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+    throw new Error("Unable to update vote count");
+  }
+};
 
 const Post = () => {
   const [displayName, setDisplayName] = useState("");
+  const [slug, setSlug] = useState("");
   const [upvoteCount, setUpvoteCount] = useState(0);
   const [description, setDescription] = useState("");
+  const [background_image, setBackground_image] = useState("");
+  const [released, setReleased] = useState("");
+  const [rating, setRating] = useState(0);
+  const [platforms, setPlatforms] = useState<
+    { platform: { id: number; name: string; slug: string } }[]
+  >([]);
   const router = useRouter();
   const { gameName } = router.query;
 
@@ -16,33 +58,49 @@ const Post = () => {
     axios
       .get(`http://localhost:8080/game?title=${gameName}`)
       .then((response) => {
-        setDisplayName(response.data.gameTitle.name);
+        setDisplayName(response.data.gameInfo.name);
+        setSlug(response.data.gameInfo.slug);
+        setDescription(response.data.gameInfo.description);
+        setBackground_image(response.data.gameInfo.background_image);
+        setReleased(response.data.gameInfo.released);
+        setPlatforms(response.data.gameInfo.platforms);
+      });
+    axios
+      .get(`http://localhost:8080/upvoteCount?title=${gameName}`)
+      .then((response) => {
         setUpvoteCount(response.data.upvoteCount);
-        setDescription(response.data.description);
+        console.log(response.data.upvoteCount);
       });
   }, [router.isReady]);
 
   return (
-    <div className="dark:bg-slate-900 min-h-screen">
+    <div className="min-h-screen dark:bg-slate-900">
       <Navbar />
-      <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 mt-10">
-        <div className="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
+      <div className="mx-auto mt-10 max-w-[85rem] px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-4 md:grid-cols-2 md:items-center md:gap-8 xl:gap-20">
           <div>
-            <h1 className="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-6xl lg:leading-tight dark:text-white">
-              Game: <span className="text-blue-600">{displayName}</span>
+            <h1 className="block text-3xl font-bold text-gray-800 dark:text-white sm:text-4xl lg:text-6xl lg:leading-tight">
+              <span className="text-blue-600">{displayName}</span>
             </h1>
+            <h2 className="mt-1 text-sm text-gray-600 ">Released {released}</h2>
+            <h2 className="mt-1 text-sm text-gray-600 ">
+              Platforms:{" "}
+              {platforms.map((platform) => platform.platform.name).join(", ")}
+            </h2>
             <p className="mt-3 text-lg text-gray-800 dark:text-gray-400">
-              {description}
+              {sanitizeHtml(description, {
+                allowedTags: ['br'],
+                allowedAttributes: [],
+              })}
             </p>
-
-            <div className="mt-7 grid gap-3 w-full sm:inline-flex">
+            <div className="mt-7 grid w-full gap-3 sm:inline-flex">
               <a
-                className="inline-flex justify-center items-center gap-x-3 text-center bg-blue-600 hover:bg-blue-700 border border-transparent text-sm lg:text-base text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition py-3 px-4 dark:focus:ring-offset-gray-800"
+                className="inline-flex items-center justify-center gap-x-3 rounded-md border border-transparent bg-blue-600 py-3 px-4 text-center text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-800 lg:text-base"
                 href="#"
               >
                 Review this game
                 <svg
-                  className="w-2.5 h-2.5"
+                  className="h-2.5 w-2.5"
                   width="16"
                   height="16"
                   viewBox="0 0 16 16"
@@ -56,20 +114,31 @@ const Post = () => {
                   />
                 </svg>
               </a>
-              <div className="inline-flex justify-center items-center gap-x-3.5 text-sm lg:text-base text-center border shadow-sm font-medium rounded-md focus:outline-none focus:ring-2 transition py-3 px-4 dark:border-gray-800  dark:shadow-slate-700/[.7] dark:text-white">
-                <button onClick={() => setUpvoteCount(upvoteCount + 1)}>
+              <div className="inline-flex items-center justify-center gap-x-3.5 rounded-md border py-3 px-4 text-center text-sm font-medium shadow-sm transition focus:outline-none focus:ring-2 dark:border-gray-800 dark:text-white  dark:shadow-slate-700/[.7] lg:text-base">
+                <button
+                  onClick={() => {
+                    setUpvoteCount(upvoteCount + 1);
+                    updateVoteCount(slug);
+                  }}
+                >
+                  {" "}
                   <ArrowUpCircle />
                 </button>
                 <span className="text-gray-800 dark:text-gray-200">
                   {upvoteCount}
                 </span>
-                <a className="">
+                <button
+                  onClick={() => {
+                    setUpvoteCount(upvoteCount - 1);
+                    updateDownVoteCount(slug);
+                  }}
+                >
                   <ArrowDownCircle />
-                </a>
+                </button>
               </div>
             </div>
 
-            <div className="mt-6 lg:mt-10 grid grid-cols-2 gap-x-5">
+            <div className="mt-6 grid grid-cols-2 gap-x-5 lg:mt-10">
               <div className="py-5">
                 <div className="flex space-x-1">
                   <svg
@@ -143,7 +212,7 @@ const Post = () => {
                   <span className="font-bold">4.6</span> /5 - from 12k reviews
                 </p>
 
-                <div className="mt-4 text-2xl font-bold text-gray-800 dark:text-[#C5C3C0] ">
+                <div className="mt-4 text-2xl font-bold text-[#C5C3C0] dark:text-[#C5C3C0] ">
                   <text>GameRizz</text>
                 </div>
               </div>
@@ -239,129 +308,10 @@ const Post = () => {
           <div className="relative ml-4">
             <img
               className="w-full rounded-md"
-              src="https://images.unsplash.com/photo-1665686377065-08ba896d16fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=700&h=800&q=80"
+              src={background_image}
               alt="Image Description"
             />
-            <div className="absolute inset-0 -z-[1] bg-gradient-to-tr from-gray-200 via-white/0 to-white/0 w-full h-full rounded-md mt-4 -mb-4 mr-4 -ml-4 lg:mt-6 lg:-mb-6 lg:mr-6 lg:-ml-6 dark:from-slate-800 dark:via-slate-900/0 dark:to-slate-900/0"></div>
-
-            <div className="absolute bottom-0 left-0">
-              <svg
-                className="w-2/3 ml-auto h-auto text-white dark:text-slate-900"
-                width="630"
-                height="451"
-                viewBox="0 0 630 451"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect
-                  x="531"
-                  y="352"
-                  width="99"
-                  height="99"
-                  fill="currentColor"
-                />
-                <rect
-                  x="140"
-                  y="352"
-                  width="106"
-                  height="99"
-                  fill="currentColor"
-                />
-                <rect
-                  x="482"
-                  y="402"
-                  width="64"
-                  height="49"
-                  fill="currentColor"
-                />
-                <rect
-                  x="433"
-                  y="402"
-                  width="63"
-                  height="49"
-                  fill="currentColor"
-                />
-                <rect
-                  x="384"
-                  y="352"
-                  width="49"
-                  height="50"
-                  fill="currentColor"
-                />
-                <rect
-                  x="531"
-                  y="328"
-                  width="50"
-                  height="50"
-                  fill="currentColor"
-                />
-                <rect
-                  x="99"
-                  y="303"
-                  width="49"
-                  height="58"
-                  fill="currentColor"
-                />
-                <rect
-                  x="99"
-                  y="352"
-                  width="49"
-                  height="50"
-                  fill="currentColor"
-                />
-                <rect
-                  x="99"
-                  y="392"
-                  width="49"
-                  height="59"
-                  fill="currentColor"
-                />
-                <rect
-                  x="44"
-                  y="402"
-                  width="66"
-                  height="49"
-                  fill="currentColor"
-                />
-                <rect
-                  x="234"
-                  y="402"
-                  width="62"
-                  height="49"
-                  fill="currentColor"
-                />
-                <rect
-                  x="334"
-                  y="303"
-                  width="50"
-                  height="49"
-                  fill="currentColor"
-                />
-                <rect x="581" width="49" height="49" fill="currentColor" />
-                <rect x="581" width="49" height="64" fill="currentColor" />
-                <rect
-                  x="482"
-                  y="123"
-                  width="49"
-                  height="49"
-                  fill="currentColor"
-                />
-                <rect
-                  x="507"
-                  y="124"
-                  width="49"
-                  height="24"
-                  fill="currentColor"
-                />
-                <rect
-                  x="531"
-                  y="49"
-                  width="99"
-                  height="99"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
+            <div className="absolute inset-0 -z-[1] mt-4 -mb-4 mr-4 -ml-4 h-full w-full rounded-md bg-gradient-to-tr from-gray-200 via-white/0 to-white/0 dark:from-slate-800 dark:via-slate-900/0 dark:to-slate-900/0 lg:mt-6 lg:-mb-6 lg:mr-6 lg:-ml-6"></div>
           </div>
         </div>
       </div>
