@@ -38,8 +38,6 @@
     "tailwindcss-animate": "^1.0.5"
   },
   "devDependencies": {
-    "@types/node": "18.15.11",
-    "@types/react": "18.0.31",
     "autoprefixer": "^10.4.13",
     "cypress": "^12.7.0",
     "postcss": "^8.4.21",

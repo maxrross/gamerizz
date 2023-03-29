@@ -115,6 +115,15 @@ func main() {
 		})
 	})
 
+	r.GET("/game", func(c *gin.Context) {
+		title := bson.M{"name": c.Query("title")}
+		c.JSON(http.StatusOK, gin.H{
+			"gameTitle": title,
+			"upvoteCount": 0,
+			"description": "test",
+		})
+	})
+
 	r.GET("/upvoteCount", func(c *gin.Context) {
 		filter := bson.M{"name": c.Query("title")}
 		var game bson.M
