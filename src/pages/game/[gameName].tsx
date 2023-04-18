@@ -45,29 +45,6 @@ const updateDownVoteCount = async (slug: string) => {
   }
 };
 
-const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  try {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-    const { data } = await axios.get(
-      `http://localhost:8080/writeReview?title=mario&author=${formData.get(
-        'name'
-      )}&review=${formData.get('Review')}&rating=${formData.get('rating')}`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-    throw new Error('Unable to update vote count');
-  }
-};
-
-
 
 const Post = () => {
   const [agreed, setAgreed] = useState(false);
@@ -78,6 +55,7 @@ const Post = () => {
   const [background_image, setBackground_image] = useState("");
   const [released, setReleased] = useState("");
   const [rating, setRating] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
   const [platforms, setPlatforms] = useState<
     { platform: { id: number; name: string; slug: string } }[]
   >([]);
@@ -108,6 +86,34 @@ const Post = () => {
       });
   }, [router.isReady]);
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    try {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const formData = new FormData(form);
+      const { data } = await axios.get(
+        `http://localhost:8080/writeReview?title=${gameName}&author=${formData.get(
+          'name'
+        )}&review=${formData.get('Review')}&rating=${formData.get('rating')}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      setSubmitted(true);
+        
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 15000);
+
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+      throw new Error('Unable to update vote count');
+    }
+  };
   
   return (
     <div className="min-h-screen dark:bg-slate-900">
@@ -125,14 +131,13 @@ const Post = () => {
             </h2>
             <p className="mt-3 text-lg text-gray-800 dark:text-gray-400">
               {sanitizeHtml(description, {
-                allowedTags: ["br"],
+                allowedTags: [],
                 allowedAttributes: [],
               })}
             </p>
             <div className="mt-7 grid w-full gap-3 sm:inline-flex">
-              <a
+              <a href="#review"
                 className="inline-flex items-center justify-center gap-x-3 rounded-md border border-transparent bg-blue-600 py-3 px-4 text-center text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-800 lg:text-base"
-                href="#"
               >
                 Review this game
                 <svg
@@ -352,40 +357,38 @@ const Post = () => {
         </div>
       </div>
       <div className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
-        <div className="bottom absolute inset-x-0 bottom-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:bottom-[-20rem]">
-          <svg
-            className="relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]"
-            viewBox="0 0 1155 678"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill="url(#45de2b6b-92d5-4d68-a6a0-9b9b2abad533)"
-              fillOpacity=".3"
-              d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z"
-            />
-            <defs>
-              <linearGradient
-                id="45de2b6b-92d5-4d68-a6a0-9b9b2abad533"
-                x1="1155.49"
-                x2="-78.208"
-                y1=".177"
-                y2="474.645"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="#4AD4AF" />
-                <stop offset={1} stopColor="#20B7AB" />
-              </linearGradient>
-            </defs>
-          </svg>
+        <div className="bottom absolute inset-x-0 bottom-[-10rem] z-10 transform-gpu overflow-hidden blur-3xl sm:bottom-[-20rem]">
+
         </div>
         <div className="grid grid-cols-2">
           <div>
-            <div className="mx-auto max-w-2xl text-center">
+          {submitted && (
+            <div className="alert alert-success shadow-lg">
+            <div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 flex-shrink-0 stroke-current"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>Your review has been submitted!</span>
+            </div>
+          </div>
+          )
+          }
+            <div id="review" className="mx-auto max-w-2xl text-center">
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                 Review this Game
               </h2>
               <p className="mt-2 text-lg leading-8 text-gray-600">
-                Title: <span className="font-bold">{gameName}</span>
+                Title: <span className="font-bold">{displayName}</span>
               </p>
             </div>
             <form
@@ -453,6 +456,7 @@ const Post = () => {
               <div className="mt-10">
                 <button
                   type="submit"
+                  onClick={() => setSubmitted(true)}
                   className="
             block w-full items-center justify-center gap-x-3 rounded-md border   border-transparent bg-blue-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm
             transition hover:bg-blue-700   focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white focus-visible:outline focus-visible:outline-2  focus-visible:outline-offset-2 dark:focus:ring-offset-gray-800 lg:text-base"
