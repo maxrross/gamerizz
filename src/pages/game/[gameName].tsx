@@ -124,8 +124,8 @@ const Post = () => {
             <h1 className="block text-3xl font-bold text-gray-800 dark:text-white sm:text-4xl lg:text-6xl lg:leading-tight">
               <span className="text-blue-600">{displayName}</span>
             </h1>
-            <h2 className="mt-1 text-sm text-gray-600 ">Released {released}</h2>
-            <h2 className="mt-1 text-sm text-gray-600 ">
+            <h2 className="mt-1 text-sm text-gray-600 dark:text-gray-100 ">Released {released}</h2>
+            <h2 className="mt-1 text-sm text-gray-600 dark:text-gray-100 ">
               Platforms:{" "}
               {platforms.map((platform) => platform.platform.name).join(", ")}
             </h2>
@@ -356,14 +356,14 @@ const Post = () => {
           </div>
         </div>
       </div>
-      <div className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
+      <div className="isolate px-6 py-24 sm:py-32 lg:px-8">
         <div className="bottom absolute inset-x-0 bottom-[-10rem] z-10 transform-gpu overflow-hidden blur-3xl sm:bottom-[-20rem]">
 
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2">
           <div>
           {submitted && (
-            <div className="alert alert-success shadow-lg">
+            <div className="alert alert-success shadow-lg mb-5">
             <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -384,10 +384,10 @@ const Post = () => {
           )
           }
             <div id="review" className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
                 Review this Game
               </h2>
-              <p className="mt-2 text-lg leading-8 text-gray-600">
+              <p className="mt-2 text-lg leading-8 text-gray-600 dark:text-gray-200">
                 Title: <span className="font-bold">{displayName}</span>
               </p>
             </div>
@@ -400,7 +400,7 @@ const Post = () => {
                   <div>
                     <label
                       htmlFor="name"
-                      className="block text-sm font-semibold leading-6 text-gray-900"
+                      className="block text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"
                     >
                       Name
                     </label>
@@ -415,7 +415,7 @@ const Post = () => {
                   </div>
                   <label
                     htmlFor="rating"
-                    className="mt-3.5 block text-sm font-semibold leading-6 text-gray-900"
+                    className="mt-3.5 block text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"
                   >
                     Rating /5
                   </label>
@@ -438,7 +438,7 @@ const Post = () => {
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="Review"
-                    className="block text-sm font-semibold leading-6 text-gray-900"
+                    className="block text-sm font-semibold leading-6 text-gray-90 dark:text-gray-100"
                   >
                     Review
                   </label>
