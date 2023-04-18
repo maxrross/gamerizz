@@ -360,7 +360,7 @@ const Post = () => {
         <div className="bottom absolute inset-x-0 bottom-[-10rem] z-10 transform-gpu overflow-hidden blur-3xl sm:bottom-[-20rem]">
 
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2">
           <div>
           {submitted && (
             <div className="alert alert-success shadow-lg">
@@ -468,7 +468,7 @@ const Post = () => {
           </div>
           <div>
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              <h2 className="text-3xl mt-16 sm:mt-0 font-bold tracking-tight text-gray-900 sm:text-4xl">
                 Rizz Reviews
               </h2>
 
