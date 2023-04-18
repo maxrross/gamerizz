@@ -22,6 +22,7 @@ describe("SearchBar", () => {
     expect(searchBar).toBeInTheDocument();
   });
 });
+
 describe("loader", () => {
   it("should render Loader component", () => {
     render(<Loader />);
