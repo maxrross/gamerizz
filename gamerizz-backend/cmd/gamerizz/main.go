@@ -148,6 +148,36 @@ func main() {
 		})
 	})
 
+	r.GET("/topGames", func(c *gin.Context) {
+		apiKey := os.Getenv("RAWG_KEY")
+		client := &http.Client{}
+		req, err := http.NewRequest("GET", "https://api.rawg.io/api/games", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		q := req.URL.Query()
+		q.Add("key", apiKey)
+		q.Add("page_size", "25")
+		req.URL.RawQuery = q.Encode()
+		resp, err := client.Do(req)
+		if err != nil {
+			log.Fatal(err)
+		}
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+		var data Response
+		err = json.Unmarshal(body, &data)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": data.Games,
+		})
+	})
+
 	r.GET("/games", func(c *gin.Context) {
 
 		games := searchGames(c.Query("title"), os.Getenv("RAWG_KEY"))
