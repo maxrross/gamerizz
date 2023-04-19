@@ -27,6 +27,14 @@ TestSearchGamesCount() -- verifies that our search is limited to the first 20 ob
 
 TestGetGameDataID() -- verifies that individual games are able to be looked up
 
+TestUpvoteCount -- verifies that the upvote count for a given game is what we expect
+
+TestUpvote() -- verifies that the upvote functionality works for a given game
+
+TestDownvote() -- verifies that the downvote functionality works for a given game
+
+TestWriteReview() -- verifies that a review can be written for a game
+
 
 
 (note our tests won't run without our API access key, which has been omitted from the test file for security reasons)
