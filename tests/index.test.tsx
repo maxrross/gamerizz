@@ -28,4 +28,18 @@ describe("loader", () => {
     render(<Loader />);
     expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
+  
+ describe("Home component", () => {
+  it("renders the page title in a Next.js Head component", () => {
+    render(<Home />);
+    const pageTitle = document.title;
+    expect(pageTitle).toBe("Video Game Platform");
+  });
+
+  it("renders the Sign Up link with the correct text content", () => {
+    render(<Home />);
+    const signUpLink = document.querySelector("a[href='/api/auth/login']");
+    expect(signUpLink.textContent).toBe("Sign Up →");
+  });
+   
 });
