@@ -2,8 +2,14 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "@/src/components/navbar";
-import { ArrowDownCircle, ArrowUpCircle } from "lucide-react";
+import { ArrowDownCircle, ArrowUpCircle, StarIcon } from "lucide-react";
 var sanitizeHtml = require("sanitize-html");
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { Switch } from "@headlessui/react";
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
 
 const updateVoteCount = async (slug: string) => {
   try {
@@ -39,7 +45,9 @@ const updateDownVoteCount = async (slug: string) => {
   }
 };
 
+
 const Post = () => {
+  const [agreed, setAgreed] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [slug, setSlug] = useState("");
   const [upvoteCount, setUpvoteCount] = useState(0);
@@ -47,8 +55,12 @@ const Post = () => {
   const [background_image, setBackground_image] = useState("");
   const [released, setReleased] = useState("");
   const [rating, setRating] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
   const [platforms, setPlatforms] = useState<
     { platform: { id: number; name: string; slug: string } }[]
+  >([]);
+  const [reviews, setReviews] = useState<
+    { author: string; review: string; rating: number }[]
   >([]);
   const router = useRouter();
   const { gameName } = router.query;
@@ -64,6 +76,7 @@ const Post = () => {
         setBackground_image(response.data.gameInfo.background_image);
         setReleased(response.data.gameInfo.released);
         setPlatforms(response.data.gameInfo.platforms);
+        setReviews(response.data.reviews);
       });
     axios
       .get(`http://localhost:8080/upvoteCount?title=${gameName}`)
@@ -73,6 +86,35 @@ const Post = () => {
       });
   }, [router.isReady]);
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    try {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const formData = new FormData(form);
+      const { data } = await axios.get(
+        `http://localhost:8080/writeReview?title=${gameName}&author=${formData.get(
+          'name'
+        )}&review=${formData.get('Review')}&rating=${formData.get('rating')}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      setSubmitted(true);
+        
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 15000);
+
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+      throw new Error('Unable to update vote count');
+    }
+  };
+  
   return (
     <div className="min-h-screen dark:bg-slate-900">
       <Navbar />
@@ -82,21 +124,20 @@ const Post = () => {
             <h1 className="block text-3xl font-bold text-gray-800 dark:text-white sm:text-4xl lg:text-6xl lg:leading-tight">
               <span className="text-blue-600">{displayName}</span>
             </h1>
-            <h2 className="mt-1 text-sm text-gray-600 ">Released {released}</h2>
-            <h2 className="mt-1 text-sm text-gray-600 ">
+            <h2 className="mt-1 text-sm text-gray-600 dark:text-gray-100 ">Released {released}</h2>
+            <h2 className="mt-1 text-sm text-gray-600 dark:text-gray-100 ">
               Platforms:{" "}
               {platforms.map((platform) => platform.platform.name).join(", ")}
             </h2>
             <p className="mt-3 text-lg text-gray-800 dark:text-gray-400">
               {sanitizeHtml(description, {
-                allowedTags: ['br'],
+                allowedTags: [],
                 allowedAttributes: [],
               })}
             </p>
             <div className="mt-7 grid w-full gap-3 sm:inline-flex">
-              <a
+              <a href="#review"
                 className="inline-flex items-center justify-center gap-x-3 rounded-md border border-transparent bg-blue-600 py-3 px-4 text-center text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-800 lg:text-base"
-                href="#"
               >
                 Review this game
                 <svg
@@ -312,6 +353,148 @@ const Post = () => {
               alt="Image Description"
             />
             <div className="absolute inset-0 -z-[1] mt-4 -mb-4 mr-4 -ml-4 h-full w-full rounded-md bg-gradient-to-tr from-gray-200 via-white/0 to-white/0 dark:from-slate-800 dark:via-slate-900/0 dark:to-slate-900/0 lg:mt-6 lg:-mb-6 lg:mr-6 lg:-ml-6"></div>
+          </div>
+        </div>
+      </div>
+      <div className="isolate px-6 py-24 sm:py-32 lg:px-8">
+        <div className="bottom absolute inset-x-0 bottom-[-10rem] z-10 transform-gpu overflow-hidden blur-3xl sm:bottom-[-20rem]">
+
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2">
+          <div>
+          {submitted && (
+            <div className="alert alert-success shadow-lg mb-5">
+            <div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 flex-shrink-0 stroke-current"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>Your review has been submitted!</span>
+            </div>
+          </div>
+          )
+          }
+            <div id="review" className="mx-auto max-w-2xl text-center">
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
+                Review this Game
+              </h2>
+              <p className="mt-2 text-lg leading-8 text-gray-600 dark:text-gray-200">
+                Title: <span className="font-bold">{displayName}</span>
+              </p>
+            </div>
+            <form
+              onSubmit={handleSubmit}
+              className="mx-auto mt-10 max-w-xl sm:mt-10"
+            >
+              <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                <div className="sm:col-span-2">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"
+                    >
+                      Name
+                    </label>
+                    <div className="mt-2.5">
+                      <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <label
+                    htmlFor="rating"
+                    className="mt-3.5 block text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"
+                  >
+                    Rating /5
+                  </label>
+                  <div className="mt-2.5">
+                    <select
+                      name="rating"
+                      id="rating"
+                      className="form-select block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      defaultValue="5"
+                    >
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label
+                    htmlFor="Review"
+                    className="block text-sm font-semibold leading-6 text-gray-90 dark:text-gray-100"
+                  >
+                    Review
+                  </label>
+                  <div className="mt-2.5">
+                    <textarea
+                      name="Review"
+                      id="Review"
+                      rows={4}
+                      className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      defaultValue={""}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-10">
+                <button
+                  type="submit"
+                  onClick={() => setSubmitted(true)}
+                  className="
+            block w-full items-center justify-center gap-x-3 rounded-md border   border-transparent bg-blue-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm
+            transition hover:bg-blue-700   focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white focus-visible:outline focus-visible:outline-2  focus-visible:outline-offset-2 dark:focus:ring-offset-gray-800 lg:text-base"
+                >
+                  Submit Review
+                </button>
+              </div>
+            </form>
+          </div>
+          <div>
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-3xl mt-16 sm:mt-0 font-bold tracking-tight text-gray-900 sm:text-4xl">
+                Rizz Reviews
+              </h2>
+
+              <div className="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+                <div className="grid grid-cols-1 gap-6">
+                  {reviews.map((review) => (
+                    <div className="here flex flex-col rounded-xl border border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-slate-900">
+                      <div className="flex-auto p-4 md:p-6">
+                        <p className="mt-3 text-base text-gray-800 dark:text-white sm:mt-6 md:text-xl">
+                          <em>" {review.review} "</em>
+                        </p>
+                        <div className="rounded-b-xl p-4 md:px-6">
+                          <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 sm:text-base">
+                            {review.author}
+                          </h3>
+                        </div>
+                        <div className="ml-2 flex items-center justify-center text-sm text-gray-500 dark:text-gray-400">
+                          <StarIcon className="h-4 w-4" aria-hidden="true" />
+                          <span className="ml-1">{review.rating}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

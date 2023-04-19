@@ -23,25 +23,26 @@ export const getGames = async (query: string) => {
   }
 };
 
+export const preLoadedGames = async () => {
+  try {
+    const { data: preLoadedGames } = await axios.get(
+      `http://localhost:8080/topGames`
+    );
+    return preLoadedGames.message;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Unable to fetch games");
+  }
+};
+
 export default function SearchBar() {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<Game[]>([]);
   const [query, setQuery] = useState("");
 
-  const debouncedGetGames = useCallback(
-    debounce(async (query: string) => {
-      setIsLoading(true);
-      const games = await getGames(query);
-      setData(games);
-      setIsLoading(false);
-    }, 500),
-    []
-  );
-
   useEffect(() => {
     let cancelled = false;
     const fetchGames = async () => {
-      if (query === "") return;
       setIsLoading(true);
       const games = await getGames(query);
       if (!cancelled) {
@@ -63,7 +64,7 @@ export default function SearchBar() {
     setQuery(event.target.value);
   };
 
-  return (
+  return(
     <div>
       <div className="mx-auto mt-10 w-4/5 max-w-6xl">
         <input
