@@ -19,6 +19,8 @@ Added unit tests to test to make sure the site shouldn't render the log in and s
 1. Testing renders home page without crashing
 2. renders SearchBar component
 3. renders Loader component
+4. Tests if user is logged in and if not, it should show the log in button
+5. If user is logged in, don't show log in button.
 
 ## Backend unit tests
 TestSearchGamesID() -- verifies the first game ID returned from our search is what we would expect from our database
