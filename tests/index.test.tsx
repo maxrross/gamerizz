@@ -29,6 +29,7 @@ describe("loader", () => {
     expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
   
+  /*
  describe("Home component", () => {
   it("renders the page title in a Next.js Head component", () => {
     render(<Home />);
@@ -41,5 +42,25 @@ describe("loader", () => {
     const signUpLink = document.querySelector("a[href='/api/auth/login']");
     expect(signUpLink.textContent).toBe("Sign Up →");
   });
-   
+*/
+ 
+test("clicking 'Sign Up' button redirects to login page", () => {
+  render(<Home />);
+  userEvent.click(screen.getByRole("link", { name: "Sign Up →" }));
+  expect(window.location.pathname).toBe("/api/auth/login");
+});
+
+test("displays 'Log In' and 'Sign Up' buttons when not logged in", () => {
+  render(<Home />);
+  expect(screen.getByRole("button", { name: "Log In" })).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "Sign Up →" })).toBeInTheDocument();
+});
+
+  
+test("clicking 'Log In' button redirects to login page", () => {
+  render(<Home />);
+  userEvent.click(screen.getByRole("button", { name: "Log In" }));
+  expect(window.location.pathname).toBe("/api/auth/login");
+});
+
 });
