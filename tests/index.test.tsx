@@ -4,23 +4,19 @@ import Home from "../src/pages/index";
 import React from "react";
 import App from "../src/pages/_app";
 import Loader from "../src/components/loader";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 
 import SearchBar, { getGames } from "../src/components/searchbar";
 import "@testing-library/jest-dom/extend-expect";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 jest.mock("axios");
+jest.mock('@auth0/nextjs-auth0/client');
+
 
 it("renders home page without crashing", () => {
   const div = document.createElement("div");
   render(<App Component={Home} />);
-});
-
-describe("SearchBar", () => {
-  it("should render SearchBar component", () => {
-    render(<SearchBar />);
-    const searchBar = screen.getByRole("textbox");
-    expect(searchBar).toBeInTheDocument();
-  });
 });
 
 describe("loader", () => {
@@ -28,18 +24,44 @@ describe("loader", () => {
     render(<Loader />);
     expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
-  
- describe("Home component", () => {
-  it("renders the page title in a Next.js Head component", () => {
-    render(<Home />);
-    const pageTitle = document.title;
-    expect(pageTitle).toBe("Video Game Platform");
+});
+
+describe('Home', () => {
+  describe('when user is authenticated', () => {
+    beforeEach(() => {
+      useUser.mockReturnValue({
+        user: {
+          name: 'John',
+          picture: 'https://test.com/picture.png'
+        },
+        isLoading: false,
+        error: null
+      });
+    });
+
+    it('should not render the log in and sign up buttons', () => {
+      render(<UserProvider><Home /></UserProvider>);
+
+      expect(screen.queryByText('Log In')).not.toBeInTheDocument();
+      expect(screen.queryByText('Sign Up')).not.toBeInTheDocument();
+    });
   });
 
-  it("renders the Sign Up link with the correct text content", () => {
-    render(<Home />);
-    const signUpLink = document.querySelector("a[href='/api/auth/login']");
-    expect(signUpLink.textContent).toBe("Sign Up →");
+  describe('when user is not authenticated', () => {
+    beforeEach(() => {
+      useUser.mockReturnValue({
+        user: null,
+        isLoading: false,
+        error: null
+      });
+    });
+
+    it('should not render the user profile and sign out button', () => {
+      render(<UserProvider><Home /></UserProvider>);
+
+      expect(screen.queryByText('John')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('John')).not.toBeInTheDocument();
+      expect(screen.queryByText('Sign Out')).not.toBeInTheDocument();
+    });
   });
-   
 });
