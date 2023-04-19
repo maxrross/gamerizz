@@ -11,6 +11,7 @@ to write a review for any game.
 
 ### Frontend
 Max: 
+
 Brogan: 
 Added unit tests to test to make sure the site shouldn't render the log in and sign up buttons, when the user is not authenticated, and that the site shouldn't render the user profile and sign out button.
 
