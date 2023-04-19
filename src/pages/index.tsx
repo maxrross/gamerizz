@@ -6,17 +6,20 @@ import { useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Navbar from "../components/navbar";
 
+
 export default function Home() {
   const { user, error, isLoading } = useUser();
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
 
+  
   useEffect(() => {
     <head>
     document.title = 'Video Game Platform';
     </head>
   }, []);
 
+  
   return (
     <div className="isolate bg-white dark:bg-slate-900 min-h-screen dark:text-white">
       <div className="TopGradient absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
@@ -123,3 +126,33 @@ export default function Home() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
