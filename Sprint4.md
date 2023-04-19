@@ -5,6 +5,8 @@ Blake:
 Added the /topGames route that shows the top 25 games in RAWG's database. Added the ability to write reviews and get reviews of any game.
 
 Zachary:
+Wrote unit tests to check the upvote count of a specific game, to check functionality of the upvote/downvote functions, and to verify the ability
+to write a review for any game.
 
 
 ### Frontend
@@ -24,6 +26,8 @@ TestSearchGamesName() -- verifies the first game Name returned from our search i
 TestSearchGamesCount() -- verifies that our search is limited to the first 20 objects (the size of the array returned should be 20)
 
 TestGetGameDataID() -- verifies that individual games are able to be looked up
+
+
 
 (note our tests won't run without our API access key, which has been omitted from the test file for security reasons)
 
