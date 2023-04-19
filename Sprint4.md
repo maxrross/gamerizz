@@ -6,14 +6,12 @@ Added the /topGames route that shows the top 25 games in RAWG's database. Added 
 
 Zachary:
 Wrote unit tests to check the upvote count of a specific game, to check functionality of the upvote/downvote functions, and to verify the ability
-to write a review for any game.
+to write a review for any game. Helped Blake with various things on the backend where possible (was recovering from surgery so couldn't help as much).
 
 
 ### Frontend
 Max: 
-
 Brogan: 
-Added unit tests to test to make sure the site shouldn't render the log in and sign up buttons, when the user is not authenticated, and that the site shouldn't render the user profile and sign out button.
 
 ## Frontend unit tests
 1. Testing renders home page without crashing
